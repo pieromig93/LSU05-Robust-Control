@@ -21,13 +21,10 @@ A3 = [-2.3817 0 -1.20 2.1827;
         -21.063 -16.055 0.87229 0;
         24.512 -16.651 -3.5379 0;
         0 1.0026 -0.029766 0];    
-    
-%deltaA come ingresso, ovvero l'inclinazione dell'alettone    
+      
 B = [0 -36.263 -0.67252 0;
     -0.24719 -688.44 -67.983 0]';
 
-%mediante la Glat decidiamo su quali paramentri agire della dinamica
-%laterale
 C = [1 0 0 0;0 0 0 1];
 
 D = [0 0;0 0];
@@ -105,10 +102,12 @@ Twz4 = minreal(lft(G2,K4,2,2)); Twz4n = norm(Twz4,inf);
 % Modelliamo ora la funzione di peso relativa agli ingressi Wu;
 
 %Wu = tf([1 wb/12],[eu wb]); Wu = Wu*[1 0;0 1];
-Wu = tf(.5,[1 20])*I;
+%Wu = tf(.5,[1 20])*I;
+%Wu = tf(.5,[1 20])*[10 0; 0 1];
+Wu = tf(.5,[1 20])*[0.005 0; 0 1];%Passa-basso
+
 G3 = minreal([W1 -W1 minreal(-W1*P1);zeros(size(I)) zeros(size(I)) Wu; zeros(size(I)) zeros(size(I)) minreal(Wm*P1);I -I -P1]);G3 = minreal(G3);
 K5 = minreal(h2syn(G3,2,2)); K6 = minreal(hinfsyn(G3,2,2));
 
 Twz5 = minreal(lft(G3,K5,2,2)); norm(Twz5,inf)
 Twz6 = minreal(lft(G3,K6,2,2)); norm(Twz6,inf)
-
