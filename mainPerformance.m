@@ -32,7 +32,7 @@ Mp = exp(-pi*zita/(sqrt(1-zita^2)));
 eps = 0.01;
 Ld = tf(wn^2, conv([1 eps],[1 2*zita*wn]))*eye(2); Ld = minreal(Ld);
 I = eye(size(Ld));
-Sd = feedback(I,Ld); Sd=minreal(Sd);
+Sd = feedback(I,Ld); Sd=minreal(-.01*Sd);
 Td = I-Sd; Td = minreal(Td);
 ts = 4/(zita*wn);
 
@@ -48,7 +48,7 @@ K1 = minreal(hinfsyn(G1,2,2));
 % cresce troppo e di diventare non reali.
 %Wu = tf(.1,[1 .5])*I;%primo aileron, secondo rudder
 Mu = 1;
-Wu = tf([1 wb/Mu], [eu wb])*diag([10,1]);
+Wu = tf([1 wb/Mu], [eu wb])*diag([2.5,.5]);
 
 G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
 K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
