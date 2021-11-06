@@ -47,7 +47,8 @@ G1 = [W1 W1*P; -I -P];
 K1 = minreal(hinfsyn(G1,2,2));
 % aggiungere funzione di peso sugli ingressi per impedire gli ingressi di
 % cresce troppo e di diventare non reali.
-Wu = tf(.1,[1 .5])*diag([150,1]);%primo aileron, secondo rudder
+%primo aileron, secondo rudder
+Wu = tf(.1,[1 .5])*diag([150,1]);
 
 
 G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);

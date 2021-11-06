@@ -101,10 +101,7 @@ Twz4 = minreal(lft(G2,K4,2,2)); Twz4n = norm(Twz4,inf);
 % Angolo di sideslip max 2 gradi e angolo di rollio max 30 gradi.
 % Modelliamo ora la funzione di peso relativa agli ingressi Wu;
 
-%Wu = tf([1 wb/12],[eu wb]); Wu = Wu*[1 0;0 1];
-%Wu = tf(.5,[1 20])*I;
-%Wu = tf(.5,[1 20])*[10 0; 0 1];
-Wu = tf(.5,[1 20])*[0.005 0; 0 1];%Passa-basso
+Wu = tf(.1,[1 .5])*diag([150,1]);
 
 G3 = minreal([W1 -W1 minreal(-W1*P1);zeros(size(I)) zeros(size(I)) Wu; zeros(size(I)) zeros(size(I)) minreal(Wm*P1);I -I -P1]);G3 = minreal(G3);
 K5 = minreal(h2syn(G3,2,2)); K6 = minreal(hinfsyn(G3,2,2));
