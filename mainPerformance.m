@@ -26,7 +26,7 @@ Px = ss(A,B,eye(4),zeros(4,2));
 
 %% SPECIFICHE DA RISPETTARE
 wn = 2; zita = 0.5;
-wb = wn*sqrt(2)/10;
+wb = wn*sqrt(2);
 eu = 0.1;
 Mp = exp(-pi*zita/(sqrt(1-zita^2)));
 eps = 0.01;
@@ -38,6 +38,7 @@ ts = 4/(zita*wn);
 
 %% SCELTA DELLA FUNZIONE DI PESO e calcolo controllore
 
+%reference a 0 db
 ref = tf(1);
 
 W1 = minreal(1/Sd)*I; 
@@ -46,13 +47,11 @@ G1 = [W1 W1*P; -I -P];
 K1 = minreal(hinfsyn(G1,2,2));
 % aggiungere funzione di peso sugli ingressi per impedire gli ingressi di
 % cresce troppo e di diventare non reali.
-%Wu = tf(.1,[1 .5])*I;%primo aileron, secondo rudder
-Mu = 1;
-Wu = tf([1 wb/Mu], [eu wb])*diag([2.5,.5]);
+Wu = tf(.1,[1 .5])*diag([150,1]);%primo aileron, secondo rudder
+
 
 G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
 K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
-Twz = minreal(lft(G2,K4,2,2)); Twzn = norm(Twz,inf)
 
 %% L,S,T con i controllori K
 [L1,S1,T1]= controlStabs(P,K1);
