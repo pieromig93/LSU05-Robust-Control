@@ -47,14 +47,14 @@ K2 = minreal(h2syn(G1,2,2));
 % aggiungere funzione di peso sugli ingressi per impedire gli ingressi di
 % cresce troppo e di diventare non reali.
 %primo aileron, secondo rudder
-% Wu = tf(.1,[1 .5])*diag([150,1]);
+ Wu = tf(.1,[1 .5])*diag([1.1 ,1]);
 % 
 % 
-% G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
-% K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
+G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
+K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
 % 
-% %% L,S,T con i controllori K
-% [L1,S1,T1]= controlStabs(P,K1);
-% [L2,S2,T2]= controlStabs(P,K2);
-% [L4,S4,T4]= controlStabs(P,K4);
+%% L,S,T con i controllori K
+[L1,S1,T1]= controlStabs(P,K1);
+[L2,S2,T2]= controlStabs(P,K2);
+[L4,S4,T4]= controlStabs(P,K4);
 
