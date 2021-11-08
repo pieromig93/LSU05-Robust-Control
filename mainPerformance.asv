@@ -30,7 +30,7 @@ Mp = exp(-pi*zita/(sqrt(1-zita^2)));
 eps = 0.01;
 Ld = tf(wn^2, conv([1 eps],[1 2*zita*wn]))*eye(2); Ld = minreal(Ld);
 I = eye(size(Ld));
-Sd = feedback(I,Ld); Sd = minreal(Sd);%Sd = minreal(-.01*Sd);
+Sd = feedback(I,Ld); Sd = minreal(-.01*Sd);
 Td = I-Sd; Td = minreal(Td);
 ts = 4/(zita*wn);
 
@@ -38,23 +38,23 @@ ts = 4/(zita*wn);
 
 %reference a 0 db
 ref = tf(1);
+
 W1 = minreal(1/Sd)*I; 
 
 G1 = [W1 W1*P;-I -P];
 K1 = minreal(hinfsyn(G1,2,2));
 K2 = minreal(h2syn(G1,2,2));
-
 % aggiungere funzione di peso sugli ingressi per impedire gli ingressi di
 % cresce troppo e di diventare non reali.
 %primo aileron, secondo rudder
-% Wu = tf(.1,[1 .5])*diag([150,1]);
-% 
-% 
-% G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
-% K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
-% 
-% %% L,S,T con i controllori K
-% [L1,S1,T1]= controlStabs(P,K1);
-% [L2,S2,T2]= controlStabs(P,K2);
-% [L4,S4,T4]= controlStabs(P,K4);
+Wu = tf(.1,[1 .5])*diag([150,1]);
+Sd = minreal(-.01*Sd);
+
+G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
+K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
+
+%% L,S,T con i controllori K
+[L1,S1,T1]= controlStabs(P,K1);
+[L2,S2,T2]= controlStabs(P,K2);
+[L4,S4,T4]= controlStabs(P,K4);
 
