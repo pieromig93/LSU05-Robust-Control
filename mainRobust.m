@@ -16,7 +16,7 @@ I = eye(size(Ld));
 Sd = feedback(I,Ld); Sd=minreal(Sd);
 Td = I-Sd; Td = minreal(Td);
 ts = 4/(zita*wn);
-
+ref = tf(1);
 %% %% DEFINIZIONE DELL'INCERTEZZA: incertezza additiva
 
 
@@ -25,8 +25,8 @@ ts = 4/(zita*wn);
 
 %sigma((P2-P1)/P1, (P3-P1)/P1, (P3-P2)/P2);
 %max si ha con P2
-Wm = minreal((P3-P1)/P1);
-W1 = inv(Sd)*eye(2);
+Wm = minreal((P2-P1)/P1);
+W1 = inv(Sd)*diag([.5,.5]);
 %W1 = tf(1, [1 .01])*I;
 
 G1 = [zeros(2) Wm*P1;-I -P1]; G1 = minreal(G1);
@@ -40,14 +40,6 @@ Twz2 = minreal(lft(G1,K2,2,2)); norm(Twz2,inf);
 Twz3 = minreal(lft(G2,K3,2,2)); norm(Twz3,inf);
 Twz4 = minreal(lft(G2,K4,2,2)); Twz4n = norm(Twz4,inf);
 
-% if Twz4n<1
-%     Twz4n
-%     L1 = minreal(P1*K4);
-%     S1 = minreal(I/(I+L1));
-%     pole(S1)
-%     T1 = minreal(I-S1);
-%     step(T1); 
-% end
 
 % Con il K4 e le funzioni di peso scelte troviamo che gli impianti risultao
 % essere tutti e 3 stabili. Inoltre con questo controllore la norma Twz è
@@ -67,7 +59,7 @@ G3 = minreal([W1 -W1 minreal(-W1*P1);zeros(size(I)) zeros(size(I)) Wu; zeros(siz
 K5 = minreal(h2syn(G3,2,2)); K6 = minreal(hinfsyn(G3,2,2));
 
 Twz5 = minreal(lft(G3,K5,2,2)); norm(Twz5,inf);
-Twz6 = minreal(lft(G3,K6,2,2)); norm(Twz6,inf)
+Twz6 = minreal(lft(G3,K6,2,2)); norm(Twz6,inf);
 
 %% REIEZIONE DEL DISTURBO
 %costruiamo ora un controllore in grado di reiettare i disturbi, definiamo
