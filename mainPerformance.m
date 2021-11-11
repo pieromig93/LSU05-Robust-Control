@@ -27,7 +27,7 @@ P = ss(A,B,C,D);
 %% SPECIFICHE DA RISPETTARE
 wn = 2; zita = 0.5;
 Mp = exp(-pi*zita/(sqrt(1-zita^2)));
-eps = 0.01;
+eps = 0.05;
 Ld = tf(wn^2, conv([1 eps],[1 2*zita*wn]))*eye(2); Ld = minreal(Ld);
 I = eye(size(Ld));
 Sd = feedback(I,Ld); Sd = minreal(Sd);%Sd = minreal(-.01*Sd);
@@ -41,13 +41,12 @@ ref = tf(1);
 W1 = minreal(1/Sd)*I; 
 
 G1 = [W1 W1*P;-I -P];
-K1 = minreal(hinfsyn(G1,2,2));
-K2 = minreal(h2syn(G1,2,2));
-
+K1 = minreal(h2syn(G1,2,2));
+K2 = minreal(hinfsyn(G1,2,2));
 % aggiungere funzione di peso sugli ingressi per impedire gli ingressi di
 % cresce troppo e di diventare non reali.
 %primo aileron, secondo rudder
- Wu = tf(.1,[1 .5])*diag([1.1 ,1]);
+ Wu = tf(.1,[1 .5])*diag([1.5 ,4]);
 % 
 % 
 G2 = [W1 minreal(-W1*P); zeros(2) Wu;I -P]; G2 = minreal(G2);
