@@ -53,13 +53,14 @@ Twz4 = minreal(lft(G2,K4,2,2)); Twz4n = norm(Twz4,inf);
 % Angolo di sideslip max 2 gradi e angolo di rollio max 30 gradi.
 % Modelliamo ora la funzione di peso relativa agli ingressi Wu;
 
-Wu = tf([1 1],[1 2])*diag([.06, .1]);
+Wu = tf([1 1],[1 2])*diag([.076, .07]);
 
 G3 = minreal([W1 -W1 minreal(-W1*P1);zeros(size(I)) zeros(size(I)) Wu; zeros(size(I)) zeros(size(I)) minreal(Wm*P1);I -I -P1]);G3 = minreal(G3);
 K5 = minreal(h2syn(G3,2,2)); K6 = minreal(hinfsyn(G3,2,2));
 
 Twz5 = minreal(lft(G3,K5,2,2)); norm(Twz5,inf);
 Twz6 = minreal(lft(G3,K6,2,2)); Twz6n = norm(Twz6,inf);
+
 
 %% REIEZIONE DEL DISTURBO
 %costruiamo ora un controllore in grado di reiettare i disturbi, definiamo
@@ -69,3 +70,5 @@ G4 = [W1 -W1 -W1 minreal(-W1*P1); zeros(2) zeros(2) zeros(2) minreal(Wm*P1); eye
 G4 = minreal(G4);
 
 K7 = minreal(h2syn(G4,2,2)); K8 = minreal(hinfsyn(G4,2,2));
+
+Twz6n
