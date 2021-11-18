@@ -17,8 +17,6 @@ Sd = feedback(I,Ld); Sd=minreal(Sd);
 Td = I-Sd; Td = minreal(Td);
 ts = 4/(zita*wn);
 ref = tf(1);
-%% %% DEFINIZIONE DELL'INCERTEZZA: incertezza additiva
-
 
 %% DEFINIZIONE DELL'INCERTEZZA: incertezza moltiplicativa
 %Secondo step
@@ -35,11 +33,10 @@ G2 = [W1 -W1 minreal(-W1*P1); zeros(size(I)) zeros(size(I)) Wm*P1; eye(size(I)) 
 K1 = minreal(h2syn(G1,2,2)); K2 = minreal(hinfsyn(G1,2,2));
 K3 = minreal(h2syn(G2,2,2)); K4 = minreal(hinfsyn(G2,2,2));
 
-Twz1 = minreal(lft(G1,K1,2,2)); norm(Twz1,inf);
-Twz2 = minreal(lft(G1,K2,2,2)); norm(Twz2,inf);
-Twz3 = minreal(lft(G2,K3,2,2)); norm(Twz3,inf);
+Twz1 = minreal(lft(G1,K1,2,2)); Twz1n = norm(Twz1,inf);
+Twz2 = minreal(lft(G1,K2,2,2)); Twz2n = norm(Twz2,inf);
+Twz3 = minreal(lft(G2,K3,2,2)); Twz3n = norm(Twz3,inf);
 Twz4 = minreal(lft(G2,K4,2,2)); Twz4n = norm(Twz4,inf);
-
 
 % Con il K4 e le funzioni di peso scelte troviamo che gli impianti risultao
 % essere tutti e 3 stabili. Inoltre con questo controllore la norma Twz è
@@ -53,7 +50,7 @@ Twz4 = minreal(lft(G2,K4,2,2)); Twz4n = norm(Twz4,inf);
 % Angolo di sideslip max 2 gradi e angolo di rollio max 30 gradi.
 % Modelliamo ora la funzione di peso relativa agli ingressi Wu;
 
-Wu = tf([1 1],[1 2])*diag([.076, .07]);
+Wu = tf([1 1],[1 2])*diag([.076, .07]);%sbagliata
 
 G3 = minreal([W1 -W1 minreal(-W1*P1);zeros(size(I)) zeros(size(I)) Wu; zeros(size(I)) zeros(size(I)) minreal(Wm*P1);I -I -P1]);G3 = minreal(G3);
 K5 = minreal(h2syn(G3,2,2)); K6 = minreal(hinfsyn(G3,2,2));
@@ -70,5 +67,3 @@ G4 = [W1 -W1 -W1 minreal(-W1*P1); zeros(2) zeros(2) zeros(2) minreal(Wm*P1); eye
 G4 = minreal(G4);
 
 K7 = minreal(h2syn(G4,2,2)); K8 = minreal(hinfsyn(G4,2,2));
-
-Twz6n
